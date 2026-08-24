@@ -1,0 +1,48 @@
+def vacuum_cleaner():
+    # Initial state
+    location = input("Enter vacuum location (A/B): ").upper()
+    room_A = input("Is Room A dirty? (Y/N): ").upper()
+    room_B = input("Is Room B dirty? (Y/N): ").upper()
+
+    print("\nInitial State:")
+    print("Vacuum Location:", location)
+    print("Room A:", "Dirty" if room_A == "Y" else "Clean")
+    print("Room B:", "Dirty" if room_B == "Y" else "Clean")
+
+    # Clean Room A
+    if location == "A":
+        if room_A == "Y":
+            print("\nAction: SUCK")
+            room_A = "N"
+            print("Room A is now clean.")
+
+        print("Action: MOVE RIGHT")
+        location = "B"
+
+        if room_B == "Y":
+            print("Action: SUCK")
+            room_B = "N"
+            print("Room B is now clean.")
+
+    # Clean Room B
+    else:
+        if room_B == "Y":
+            print("\nAction: SUCK")
+            room_B = "N"
+            print("Room B is now clean.")
+
+        print("Action: MOVE LEFT")
+        location = "A"
+
+        if room_A == "Y":
+            print("Action: SUCK")
+            room_A = "N"
+            print("Room A is now clean.")
+
+    print("\nFinal State:")
+    print("Vacuum Location:", location)
+    print("Room A:", "Clean" if room_A == "N" else "Dirty")
+    print("Room B:", "Clean" if room_B == "N" else "Dirty")
+
+
+vacuum_cleaner()

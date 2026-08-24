@@ -1,0 +1,41 @@
+from itertools import permutations
+
+def solve_cryptarithm():
+    # Cryptarithm: SEND + MORE = MONEY
+    word1 = "SEND"
+    word2 = "MORE"
+    result = "MONEY"
+
+    letters = set(word1 + word2 + result)
+    letters = list(letters)
+
+    # Leading letters cannot be zero
+    leading = {'S', 'M'}
+
+    for values in permutations(range(10), len(letters)):
+        mapping = dict(zip(letters, values))
+
+        # Leading letters cannot be zero
+        if any(mapping[ch] == 0 for ch in leading):
+            continue
+
+        def number(word):
+            value = 0
+            for ch in word:
+                value = value * 10 + mapping[ch]
+            return value
+
+        num1 = number(word1)
+        num2 = number(word2)
+        num_result = number(result)
+
+        if num1 + num2 == num_result:
+            print("Solution found:")
+            print(mapping)
+            print(f"{num1} + {num2} = {num_result}")
+            return
+
+    print("No solution exists.")
+
+
+solve_cryptarithm()

@@ -1,0 +1,96 @@
+from collections import deque
+
+def is_valid(m_left, c_left, m_right, c_right):
+    # Number of people cannot be negative
+    if min(m_left, c_left, m_right, c_right) < 0:
+        return False
+
+    # On the left bank, missionaries must not be outnumbered
+    if m_left > 0 and c_left > m_left:
+        return False
+
+    # On the right bank, missionaries must not be outnumbered
+    if m_right > 0 and c_right > m_right:
+        return False
+
+    return True
+
+
+def solve():
+    # State: (missionaries_left, cannibals_left, boat_side)
+    # boat_side = 0 -> left, 1 -> right
+
+    start = (3, 3, 0)
+    goal = (0, 0, 1)
+
+    queue = deque()
+    queue.append((start, []))
+
+    visited = set()
+    visited.add(start)
+
+    # Possible numbers of missionaries and cannibals in the boat
+    moves = [
+        (1, 0),  # 1 missionary
+        (2, 0),  # 2 missionaries
+        (0, 1),  # 1 cannibal
+        (0, 2),  # 2 cannibals
+        (1, 1)   # 1 missionary and 1 cannibal
+    ]
+
+    while queue:
+        state, path = queue.popleft()
+
+        if state == goal:
+            print("Solution found:\n")
+
+            for i, step in enumerate(path, 1):
+                print(f"Step {i}: {step}")
+
+            return
+
+        m_left, c_left, boat = state
+
+        for m, c in moves:
+
+            if boat == 0:
+                # Boat moves from left to right
+                new_m_left = m_left - m
+                new_c_left = c_left - c
+                new_boat = 1
+
+                action = f"Move {m} Missionary(s) and {c} Cannibal(s) Left -> Right"
+
+            else:
+                # Boat moves from right to left
+                new_m_left = m_left + m
+                new_c_left = c_left + c
+                new_boat = 0
+
+                action = f"Move {m} Missionary(s) and {c} Cannibal(s) Right -> Left"
+
+            new_m_right = 3 - new_m_left
+            new_c_right = 3 - new_c_left
+
+            new_state = (
+                new_m_left,
+                new_c_left,
+                new_boat
+            )
+
+            if is_valid(
+                new_m_left,
+                new_c_left,
+                new_m_right,
+                new_c_right
+            ):
+                if new_state not in visited:
+                    visited.add(new_state)
+                    queue.append(
+                        (new_state, path + [action])
+                    )
+
+    print("No solution exists.")
+
+
+solve()

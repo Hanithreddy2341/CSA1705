@@ -1,0 +1,45 @@
+from itertools import permutations
+
+def tsp(graph, start):
+    cities = list(graph.keys())
+    cities.remove(start)
+
+    min_cost = float('inf')
+    best_path = None
+
+    # Generate all possible paths
+    for path in permutations(cities):
+        current_path = (start,) + path
+
+        # Calculate total cost
+        cost = 0
+
+        for i in range(len(current_path) - 1):
+            cost += graph[current_path[i]][current_path[i + 1]]
+
+        # Return to starting city
+        cost += graph[current_path[-1]][start]
+
+        # Find minimum cost
+        if cost < min_cost:
+            min_cost = cost
+            best_path = current_path
+
+    return best_path, min_cost
+
+
+# Distance/cost matrix
+graph = {
+    'A': {'A': 0, 'B': 10, 'C': 15, 'D': 20},
+    'B': {'A': 10, 'B': 0, 'C': 35, 'D': 25},
+    'C': {'A': 15, 'B': 35, 'C': 0, 'D': 30},
+    'D': {'A': 20, 'B': 25, 'C': 30, 'D': 0}
+}
+
+# Starting city
+start = 'A'
+
+path, cost = tsp(graph, start)
+
+print("Best Path:", " -> ".join(path) + " -> " + start)
+print("Minimum Cost:", cost)
